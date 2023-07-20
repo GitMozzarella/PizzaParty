@@ -5,7 +5,11 @@ import { useParams, useNavigate } from "react-router-dom";
 const FullPizza: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [pizza, setPizza] = React.useState();
+  const [pizza, setPizza] = React.useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
 
   React.useEffect(() => {
     async function fetchPizza() {
@@ -30,7 +34,6 @@ const FullPizza: React.FC = () => {
       <img src={pizza.imageUrl} alt="" />
       <h2>{pizza.title}</h2>
       <h3>{pizza.price} ₽ </h3>
-      <p>{pizza.description}</p>
     </div>
   );
 };

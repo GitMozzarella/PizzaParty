@@ -1,30 +1,31 @@
 import React from "react";
 import styles from "./Search.module.scss";
 import debounce from "lodash.debounce";
-import { setSearchValue } from "../../redux/slices/filterSlice";
-import { useDispatch } from "react-redux";
 
-const Search = () => {
+import { useDispatch } from "react-redux";
+import { setSearchValue } from "../../redux/filter/slice";
+
+const Search: React.FC = () => {
   const dispatch = useDispatch();
 
-  const [value, setValue] = React.useState();
+  const [value, setValue] = React.useState("");
 
-  const inputRef = React.useRef();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const onClickClear = () => {
+  function onClickClear(event: React.MouseEvent<SVGSVGElement>) {
     dispatch(setSearchValue(""));
     setValue("");
-    inputRef.current.focus();
-  };
+    inputRef.current?.focus();
+  }
 
   const updateSearchValue = React.useCallback(
-    debounce((str) => {
+    debounce((str: string) => {
       dispatch(setSearchValue(str));
     }, 1000),
     []
   );
 
-  const onChangeInput = (event) => {
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearchValue(event.target.value);
   };
@@ -50,7 +51,7 @@ const Search = () => {
       />
       {value && (
         <svg
-          onClick={() => onClickClear("")}
+          onClick={onClickClear}
           className={styles.clearIcon}
           enableBackground="new 0 0 64 64"
           version="1.1"

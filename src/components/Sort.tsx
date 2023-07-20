@@ -1,31 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setSort  , selectSort} from "../redux/slices/filterSlice";
+import { useDispatch } from "react-redux";
+import { setSort } from "../redux/filter/slice";
+import { SortPropertyEnum, Sort } from "../redux/filter/types";
 
-export const sortList = [
-  { name: "популярности(desc)", sortProperty: "rating" },
-  { name: "популярности(asc)", sortProperty: "-rating" },
-  { name: "цене(desc)", sortProperty: "price" },
-  { name: "цене(asc)", sortProperty: "-price" },
-  { name: "алфавиту(desc)", sortProperty: "title" },
-  { name: "алфавиту(asc)", sortProperty: "-title" },
+type SortListItem = {
+  name: string;
+  sortProperty: SortPropertyEnum;
+};
+
+export const sortList: SortListItem[] = [
+  { name: "популярности(desc)", sortProperty: SortPropertyEnum.RATING_DESC },
+  { name: "популярности(asc)", sortProperty: SortPropertyEnum.RATING_ASC },
+  { name: "цене(desc)", sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: "цене(asc)", sortProperty: SortPropertyEnum.PRICE_ASC },
+  { name: "алфавиту(desc)", sortProperty: SortPropertyEnum.TITLE_DESC },
+  { name: "алфавиту(asc)", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-function Sort() {
+export type SortPopupProps = {
+  value: Sort;
+};
+const SortPopup: React.FC<SortPopupProps> = React.memo(({ value }) => {
   const dispatch = useDispatch();
-  const sort = useSelector(selectSort);
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
 
-  const onClickListItem = (obj) => {
+  const onClickListItem = (obj: SortListItem) => {
     dispatch(setSort(obj));
     setOpen(false);
   };
 
   useEffect(() => {
-    const clickOutside = (event) => {
-      if (sortRef.current && !sortRef.current?.contains(event.target)) {
+    const clickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (sortRef.current && !sortRef.current.contains(target)) {
         setOpen(false);
       }
     };
@@ -49,7 +58,7 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{sort.name}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -59,7 +68,7 @@ function Sort() {
                 key={index}
                 onClick={() => onClickListItem(obj)}
                 className={
-                  sort.sortProperty === obj.sortProperty ? "active" : ""
+                  value.sortProperty === obj.sortProperty ? "active" : ""
                 }
               >
                 {obj.name}
@@ -70,6 +79,6 @@ function Sort() {
       )}
     </div>
   );
-}
+});
 
-export default Sort;
+export default SortPopup;
