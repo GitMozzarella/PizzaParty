@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import styles from "./FullPizza.module.scss";
 
 const FullPizza: React.FC = () => {
   const { id } = useParams();
@@ -8,7 +9,12 @@ const FullPizza: React.FC = () => {
   const [pizza, setPizza] = React.useState<{
     imageUrl: string;
     title: string;
-    price: number;
+    price: number[];
+    description: string;
+    types: {
+      sizes: number[];
+      prices: number[];
+    }[];
   }>();
 
   React.useEffect(() => {
@@ -29,11 +35,20 @@ const FullPizza: React.FC = () => {
   if (!pizza) {
     return <>"Загрузка..."</>;
   }
+  console.log(pizza.price);
+  console.log(pizza.types);
   return (
-    <div className="container">
-      <img src={pizza.imageUrl} alt="" />
-      <h2>{pizza.title}</h2>
-      <h3>{pizza.price} ₽ </h3>
+    <div className={styles.container}>
+      <div className={styles.info}>
+        <div className={styles.image}>
+          <img src={pizza.imageUrl} alt="" />
+        </div>
+        <div className={styles.price}>Цена : {pizza.types[0].prices[0]} ₽</div>
+      </div>
+      <div className={styles.descriptionBlock}>
+        <h2 className={styles.title}>{pizza.title}</h2>
+        <div className={styles.description}>{pizza.description}</div>
+      </div>
     </div>
   );
 };

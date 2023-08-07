@@ -1,47 +1,56 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { selectCartItemById } from "../../redux/cart/selectors";
+import { cartItemsSelector } from "../../redux/cart/selectors";
 import { addItem } from "../../redux/cart/slice";
 import { CartItem } from "../../redux/cart/types";
+import React from "react";
 
 const typesNames = ["тонкое", "традиционное"];
 
-type PizzaBlockProps = {
+export type PizzaBlockProps = {
+  description: string;
   id: string;
   title: string;
-  price: number;
   imageUrl: string;
-  sizes: number[];
-  types: number[];
   rating: number;
   count: number;
+  types: {
+    sizes: number[];
+    prices: number[];
+  }[];
 };
 
 const PizzaBlock: React.FC<PizzaBlockProps> = ({
   id,
   title,
-  price,
   imageUrl,
-  sizes,
   types,
 }) => {
   const dispatch = useDispatch();
-  const cartItem = useSelector(selectCartItemById(id));
+  const [cartItemCount, setCartItemCount] = React.useState(0);
+  const cartItem: CartItem[] = useSelector(cartItemsSelector);
 
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
 
-  const addedCount = cartItem ? cartItem.count : 0;
+  React.useEffect(() => {
+    const filterCartItem = cartItem.filter((obj) => obj.id === id);
+    const totalCount = filterCartItem.reduce(
+      (sum, item) => sum + item.count,
+      0
+    );
+    setCartItemCount(totalCount);
+  }, [cartItem, id]);
 
   const onClickAdd = () => {
     const item: CartItem = {
       id,
       title,
       imageUrl,
-      price,
+      price: types[activeType].prices[activeSize],
       type: typesNames[activeType],
-      sizes: sizes[activeSize],
+      size: types[activeType].sizes[activeSize],
       count: 0,
     };
     dispatch(addItem(item));
@@ -56,18 +65,18 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
         </Link>
         <div className="pizza-block__selector">
           <ul>
-            {types.map((typeId) => (
+            {types.map((obj, i) => (
               <li
-                key={typeId}
-                onClick={() => setActiveType(typeId)}
-                className={activeType === typeId ? "active" : ""}
+                key={i}
+                onClick={() => setActiveType(i)}
+                className={activeType === i ? "active" : ""}
               >
-                {typesNames[typeId]}
+                {typesNames[i]}
               </li>
             ))}
           </ul>
           <ul>
-            {sizes.map((size, i) => (
+            {types[activeType].sizes.map((size, i) => (
               <li
                 key={i}
                 onClick={() => setActiveSize(i)}
@@ -79,7 +88,9 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
           </ul>
         </div>
         <div className="pizza-block__bottom">
-          <div className="pizza-block__price">от {price} ₽</div>
+          <div className="pizza-block__price">
+            от {types[activeType].prices[activeSize]} ₽
+          </div>
           <button
             onClick={onClickAdd}
             className="button button--outline button--add"
@@ -97,7 +108,7 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
               />
             </svg>
             <span>Добавить</span>
-            {addedCount > 0 && <i>{addedCount}</i>}
+            {cartItemCount > 0 && <i>{cartItemCount}</i>}
           </button>
         </div>
       </div>

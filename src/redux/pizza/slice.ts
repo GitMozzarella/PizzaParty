@@ -5,6 +5,7 @@ import { fetchPizzas } from "./asyncActions";
 const initialState: PizzaSliceState = {
   items: [],
   status: Status.LOADING, //loading| success |error
+  allItems: [],
 };
 
 const pizzaSlice = createSlice({
@@ -14,6 +15,9 @@ const pizzaSlice = createSlice({
     setItems(state, action: PayloadAction<Pizza[]>) {
       state.items = action.payload;
     },
+    setAllItems(state, action: PayloadAction<Pizza[]>) {
+      state.allItems = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -22,8 +26,9 @@ const pizzaSlice = createSlice({
       state.items = [];
     });
     builder.addCase(fetchPizzas.fulfilled, (state, action) => {
-      state.items = action.payload;
+      state.items = action.payload.items;
       state.status = Status.SUCCESS;
+      state.allItems = action.payload.allItems;
     });
     builder.addCase(fetchPizzas.rejected, (state, action) => {
       state.status = Status.ERROR;

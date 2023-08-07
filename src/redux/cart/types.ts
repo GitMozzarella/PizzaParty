@@ -4,7 +4,7 @@ export type CartItem = {
   imageUrl: string;
   price: number;
   type: string;
-  sizes: number;
+  size: number;
   count: number;
 };
 
@@ -12,3 +12,9 @@ export interface CartSliceState {
   totalPrice: number;
   items: CartItem[];
 }
+
+export type RemoveCartItem = {
+  id: string;
+  size: number;
+  type: string;
+};

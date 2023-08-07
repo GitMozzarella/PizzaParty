@@ -7,7 +7,7 @@ type CartItemProps = {
   id: string;
   title: string;
   type: string;
-  sizes: number;
+  size: number;
   price: number;
   count: number;
   imageUrl: string;
@@ -17,7 +17,7 @@ const CartItemBlock: React.FC<CartItemProps> = ({
   id,
   title,
   type,
-  sizes,
+  size,
   price,
   count,
   imageUrl,
@@ -28,17 +28,19 @@ const CartItemBlock: React.FC<CartItemProps> = ({
     dispatch(
       addItem({
         id,
+        type,
+        size,
       } as CartItem)
     );
   };
 
   const onClickMinus = () => {
-    dispatch(minusItem(id));
+    dispatch(minusItem({ id, type, size }));
   };
 
   const onClickRemove = () => {
     if (window.confirm("Удалить товар из корзины,вы уверены?")) {
-      dispatch(removeItem(id));
+      dispatch(removeItem({ id, type, size }));
     }
   };
 
@@ -51,7 +53,7 @@ const CartItemBlock: React.FC<CartItemProps> = ({
         <div className="cart__item-info">
           <h3>{title}</h3>
           <p>
-            {type}, {sizes} см.
+            {type}, {size} см.
           </p>
         </div>
         <div className="cart__item-count">

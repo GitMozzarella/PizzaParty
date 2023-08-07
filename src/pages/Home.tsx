@@ -1,8 +1,6 @@
 import React from "react";
-import qs from "qs";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import Categories from "../components/Categories";
 import Sort, { sortList } from "../components/Sort";
@@ -21,7 +19,7 @@ const Home: React.FC = () => {
 
   const { categoryId, sort, currentPage, searchValue } =
     useSelector(selectFilter);
-  const { items, status } = useSelector(selectPizzaData);
+  const { items, status, allItems } = useSelector(selectPizzaData);
 
   const onChangeCategory = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
@@ -72,11 +70,17 @@ const Home: React.FC = () => {
         </div>
       ) : (
         <div className="content__items">
-          {status === "loading" ? skeletons : pizzas}
+          {status === "loading"
+            ? skeletons
+            : pizzas.length
+            ? pizzas
+            : "Нет пицц"}
         </div>
       )}
 
-      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
+      {items.length && allItems.length > 8 ? (
+        <Pagination currentPage={currentPage} onChangePage={onChangePage} />
+      ) : null}
     </div>
   );
 };

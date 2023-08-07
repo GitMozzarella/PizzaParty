@@ -1,0 +1,58 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image {
+    flex-shrink: 0;
+    width: 584px;
+    height: 584px;
+    margin-right: 20px;
+    margin-left: 20px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .price {
+    font-size: 24px;
+    margin-top: 20px;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+  }
+
+  .descriptionBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    padding-left: 20px;
+  }
+
+  .title {
+    font-size: 38px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-family: "Montserrat", sans-serif;
+    text-align: center;
+  }
+
+  .description {
+    font-size: 32px;
+    margin-top: 100px;
+    font-family: "Montserrat", sans-serif;
+    font-style: italic;
+    text-indent: 60px;
+    font-weight: 400;
+  }
+}

@@ -1,11 +1,13 @@
 export type Pizza = {
   id: string;
   title: string;
-  price: number;
   imageUrl: string;
-  sizes: number[];
-  types: number[];
   rating: number;
+  count: number;
+  types: {
+    sizes: number[];
+    prices: number[];
+  }[];
 };
 
 export enum Status {
@@ -17,6 +19,7 @@ export enum Status {
 export interface PizzaSliceState {
   items: Pizza[];
   status: Status;
+  allItems: Pizza[];
 }
 export type SearchPizzaParams = {
   category: string;
