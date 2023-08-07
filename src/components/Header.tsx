@@ -1,4 +1,4 @@
-import pizzaLogo from "../assets/img/pizza-logo.svg";
+import pizzaLogo from "../assets/img/pizza-logo.png";
 import { Link, useLocation } from "react-router-dom";
 import Search from "./Search";
 import { useSelector } from "react-redux";
@@ -28,10 +28,10 @@ function Header() {
       <div className="container">
         <Link to="/">
           <div className="header__logo">
-            <img width="38" src={pizzaLogo} alt="Pizza logo" />
+            <img width="50" src={pizzaLogo} alt="Pizza logo" />
             <div>
-              <h1>ДОДО ПИЦЦА</h1>
-              <p>Сеть пиццерий №1 в Казахстане</p>
+              <h1>Жар-ПИЦЦА</h1>
+              <p>Обжигающе вкусно</p>
             </div>
           </div>
         </Link>

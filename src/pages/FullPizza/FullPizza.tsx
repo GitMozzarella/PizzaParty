@@ -35,8 +35,7 @@ const FullPizza: React.FC = () => {
   if (!pizza) {
     return <>"Загрузка..."</>;
   }
-  console.log(pizza.price);
-  console.log(pizza.types);
+
   return (
     <div className={styles.container}>
       <div className={styles.info}>
